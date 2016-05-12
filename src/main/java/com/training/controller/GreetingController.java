@@ -8,6 +8,8 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,5 +50,24 @@ public class GreetingController {
 		Collection<Greeting> greetings = greetingMap.values();
 		
 		return new ResponseEntity<Collection<Greeting>> (greetings, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/greetings/{id}", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Greeting> getGreeting(@PathVariable("id") BigInteger id) {
+		Greeting greeting = greetingMap.get(id);
+		
+		if(greeting == null) {
+			return new ResponseEntity<Greeting>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Greeting> (greeting, HttpStatus.OK);
+		}
+		
+	}
+	
+	@RequestMapping(value = "/greetings", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Greeting> createGreeting(@RequestBody Greeting greeting) {
+		
+		Greeting savedGreeting = save(greeting);
+		return new ResponseEntity<Greeting> (savedGreeting, HttpStatus.CREATED);
 	}
 }
