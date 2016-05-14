@@ -70,4 +70,26 @@ public class GreetingController {
 		Greeting savedGreeting = save(greeting);
 		return new ResponseEntity<Greeting> (savedGreeting, HttpStatus.CREATED);
 	}
+	
+	public static boolean delete(BigInteger id) {
+		Greeting deleteGreeting = greetingMap.remove(id);
+		if(deleteGreeting == null) {
+			return false;
+		}
+		return true;
+	}
+	
+	@RequestMapping(
+			value = "/greetings/{id}", 
+			method = RequestMethod.DELETE, 
+			consumes = MediaType.APPLICATION_JSON_VALUE) 
+	public ResponseEntity<Greeting> deleteGreeting(@PathVariable("id") BigInteger id, @RequestBody Greeting greeting) {
+		boolean deleted = delete(id);
+		if(!deleted) {
+			return new ResponseEntity<Greeting>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<Greeting>(HttpStatus.NO_CONTENT);
+	}
+	
 }
