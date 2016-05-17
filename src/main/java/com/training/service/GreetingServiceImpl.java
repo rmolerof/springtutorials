@@ -6,10 +6,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.training.model.Greeting;
 
 @Service
+@Transactional(
+		propagation=Propagation.SUPPORTS,
+		readOnly = true)
 public class GreetingServiceImpl implements GreetingService {
 	
 	private static BigInteger nextId;
@@ -45,27 +50,37 @@ public class GreetingServiceImpl implements GreetingService {
 		return true;
 	}
 	
-	@Override
 	public Collection<Greeting> findAll() {
 		return greetingMap.values();
 	}
 
-	@Override
 	public Greeting findOne(Long id) {
 		return greetingMap.get(BigInteger.valueOf(id));
 	}
 
-	@Override
+	@Transactional(
+			propagation=Propagation.REQUIRED,
+			readOnly = false)
 	public Greeting create(Greeting greeting) {
-		return save(greeting);
+		Greeting savedGreeting = save(greeting); 
+		
+		if(savedGreeting.getId().longValue() == 4L){
+			throw new RuntimeException("Roll me back");
+		}
+		
+		return savedGreeting;
 	}
-
-	@Override
+	
+	@Transactional(
+			propagation=Propagation.REQUIRED,
+			readOnly = false)
 	public Greeting update(Greeting greeting) {
 		return greetingMap.put(greeting.getId(), greeting);
 	}
-
-	@Override
+	
+	@Transactional(
+			propagation=Propagation.REQUIRED,
+			readOnly = false)
 	public boolean delete(long id) {
 		return delete(BigInteger.valueOf(id));
 	}
