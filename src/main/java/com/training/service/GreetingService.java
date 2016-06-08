@@ -10,4 +10,5 @@ public interface GreetingService {
 	public Greeting create(Greeting greeting);
 	public Greeting update(Greeting greeting);
 	public boolean delete(long id);
+	public void evictCache();
 }

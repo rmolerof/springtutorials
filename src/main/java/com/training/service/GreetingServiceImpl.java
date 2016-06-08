@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +56,10 @@ public class GreetingServiceImpl implements GreetingService {
 	public Collection<Greeting> findAll() {
 		return greetingMap.values();
 	}
-
+	
+	@Cacheable(
+			value = "greetings",
+			key="#id")
 	public Greeting findOne(Long id) {
 		return greetingMap.get(BigInteger.valueOf(id));
 	}
@@ -61,6 +67,9 @@ public class GreetingServiceImpl implements GreetingService {
 	@Transactional(
 			propagation=Propagation.REQUIRED,
 			readOnly = false)
+	@CachePut(
+			value="greetings",
+			key = "#result.id")
 	public Greeting create(Greeting greeting) {
 		Greeting savedGreeting = save(greeting); 
 		
@@ -74,6 +83,9 @@ public class GreetingServiceImpl implements GreetingService {
 	@Transactional(
 			propagation=Propagation.REQUIRED,
 			readOnly = false)
+	@CachePut(
+			value="greetings",
+			key = "#greeting.id")
 	public Greeting update(Greeting greeting) {
 		return greetingMap.put(greeting.getId(), greeting);
 	}
@@ -81,8 +93,21 @@ public class GreetingServiceImpl implements GreetingService {
 	@Transactional(
 			propagation=Propagation.REQUIRED,
 			readOnly = false)
+	@CacheEvict(
+			value = "greetings",
+			key="#id")
 	public boolean delete(long id) {
 		return delete(BigInteger.valueOf(id));
+	}
+
+	/*
+	 * All items in the greetings cache will be purged
+	 */
+	@CacheEvict(
+			value="greetings",
+			allEntries=true)
+	public void evictCache() {
+		
 	}
 
 }
