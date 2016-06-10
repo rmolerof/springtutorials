@@ -51,9 +51,9 @@ public class GreetingBatch {
 	 * Ensures that at least one instance of the process will be running at
 	 * any given time
 	 */
-	@Scheduled(
+	/*@Scheduled(
 			initialDelay=5000,
-			fixedDelay=15000)
+			fixedDelay=15000)*/
 	public void fixedDelayWithInitialDelay (){
 		LOG.info("> fixedRateWithInitialDelay");
 		
