@@ -1,6 +1,6 @@
 package com.training.service;
 
-import java.util.concurrent.Future;
+import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +8,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.training.model.Greeting;
-import com.training.util.AsyncResponse;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -47,10 +46,10 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	@Async
-	public AsyncResponse<Boolean> sendAsyncWithResult(Greeting greeting) {
-		LOG.info("> sendAsyncWithResult");
+	public CompletableFuture<Boolean> sendAsyncWithResultCF(Greeting greeting) {
+		LOG.info("> sendAsyncWithResultCF");
 		
-		AsyncResponse<Boolean> response = new AsyncResponse<Boolean>();
+		CompletableFuture<Boolean> response = new CompletableFuture<Boolean>();
 		
 		try{
 			Boolean success = send(greeting);
@@ -60,7 +59,7 @@ public class EmailServiceImpl implements EmailService {
 			response.completeExceptionally(e);
 		}
 		
-		LOG.info("< sendAsyncWithResult");
+		LOG.info("< sendAsyncWithResultCF");
 		return response;
 	}
 

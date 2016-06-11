@@ -2,6 +2,7 @@ package com.training.controller;
 
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.training.model.Greeting;
 import com.training.service.EmailService;
 import com.training.service.GreetingService;
-import com.training.util.AsyncResponse;
 
 @RestController
 public class GreetingController {
@@ -116,7 +116,7 @@ public class GreetingController {
 			}
 			
 			if(waitForAsyncResult){
-				AsyncResponse<Boolean> asyncResponse = emailService.sendAsyncWithResult(greeting);
+				CompletableFuture<Boolean> asyncResponse = emailService.sendAsyncWithResultCF(greeting);
 				boolean emailSent = asyncResponse.get();
 				LOG.info("email sent? {}", emailSent);
 			} else {

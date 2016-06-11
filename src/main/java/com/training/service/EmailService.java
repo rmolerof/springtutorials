@@ -1,10 +1,11 @@
 package com.training.service;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.training.model.Greeting;
-import com.training.util.AsyncResponse;
 
 public interface EmailService {
 	Boolean send(Greeting gretting);
 	void sendAsync(Greeting greeting);
-	AsyncResponse<Boolean> sendAsyncWithResult(Greeting greeting);
+	CompletableFuture<Boolean> sendAsyncWithResultCF(Greeting greeting);
 }
