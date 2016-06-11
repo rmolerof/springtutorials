@@ -97,6 +97,9 @@ public class GreetingController {
 		return new ResponseEntity<Greeting>(HttpStatus.NO_CONTENT);
 	}
 	
+	/**
+	 * Request ex: http://localhost:8080/greetings/2/send?wait=false
+	 */
 	@RequestMapping(
 			value = "/greetings/{id}/send",
 			method = RequestMethod.POST,
