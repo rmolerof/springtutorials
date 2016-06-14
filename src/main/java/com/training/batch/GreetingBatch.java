@@ -5,12 +5,14 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.training.model.Greeting;
 import com.training.service.GreetingService;
 
+@Profile("batch")
 @Component
 public class GreetingBatch {
 
@@ -19,7 +21,7 @@ public class GreetingBatch {
 	@Autowired
 	private GreetingService greetingService;
 	
-	/*@Scheduled(cron = "0,30 * * * * *")*/
+	@Scheduled(cron = "${batch.greeting.cron}")
 	public void cronJob() {
 		LOG.info("> cronJob");
 		
@@ -29,9 +31,9 @@ public class GreetingBatch {
 		LOG.info("< cronJob");
 	}
 	
-	/*@Scheduled(
-			initialDelay = 5000,
-			fixedRate = 15000)*/
+	@Scheduled(
+			initialDelayString = "${batch.greeting.initialdelay}",
+			fixedRateString = "${batch.greeting.fixedrate}")
 	public void fixedRateWithInitialDelay (){
 		LOG.info("> fixedRateWithInitialDelay");
 		
@@ -51,11 +53,11 @@ public class GreetingBatch {
 	 * Ensures that at least one instance of the process will be running at
 	 * any given time
 	 */
-	/*@Scheduled(
-			initialDelay=5000,
-			fixedDelay=15000)*/
+	@Scheduled(
+			initialDelayString="${batch.greeting.initialdelay}",
+			fixedDelayString="${batch.greeting.fixeddelay}")
 	public void fixedDelayWithInitialDelay (){
-		LOG.info("> fixedRateWithInitialDelay");
+		LOG.info("> fixedDelayWithInitialDelay");
 		
 		long pause = 5000;
 		long start = System.currentTimeMillis();
@@ -66,6 +68,6 @@ public class GreetingBatch {
 		} while (true);
 		LOG.info("Processing time was {} secs", pause/1000);
 		
-		LOG.info("< fixedRateWithInitialDelay");
+		LOG.info("< fixedDelayWithInitialDelay");
 	}
 }
