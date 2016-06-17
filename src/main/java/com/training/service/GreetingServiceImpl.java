@@ -28,8 +28,11 @@ public class GreetingServiceImpl implements GreetingService {
 			greetingMap = new HashMap<BigInteger, Greeting>();
 			nextId = BigInteger.ONE;
 		}
-		greeting.setId(nextId);
-		nextId = nextId.add(BigInteger.ONE);
+		if (null == greeting.getId()){
+			greeting.setId(nextId);
+			nextId = nextId.add(BigInteger.ONE);
+		} 
+		
 		greetingMap.put(greeting.getId(), greeting);
 		return greeting;
 	}

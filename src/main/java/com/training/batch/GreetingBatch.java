@@ -21,7 +21,7 @@ public class GreetingBatch {
 	@Autowired
 	private GreetingService greetingService;
 	
-	@Scheduled(cron = "${batch.greeting.cron}")
+	/*@Scheduled(cron = "${batch.greeting.cron}")*/
 	public void cronJob() {
 		LOG.info("> cronJob");
 		
@@ -31,9 +31,9 @@ public class GreetingBatch {
 		LOG.info("< cronJob");
 	}
 	
-	@Scheduled(
+	/*@Scheduled(
 			initialDelayString = "${batch.greeting.initialdelay}",
-			fixedRateString = "${batch.greeting.fixedrate}")
+			fixedRateString = "${batch.greeting.fixedrate}")*/
 	public void fixedRateWithInitialDelay (){
 		LOG.info("> fixedRateWithInitialDelay");
 		
@@ -53,9 +53,9 @@ public class GreetingBatch {
 	 * Ensures that at least one instance of the process will be running at
 	 * any given time
 	 */
-	@Scheduled(
+	/*@Scheduled(
 			initialDelayString="${batch.greeting.initialdelay}",
-			fixedDelayString="${batch.greeting.fixeddelay}")
+			fixedDelayString="${batch.greeting.fixeddelay}")*/
 	public void fixedDelayWithInitialDelay (){
 		LOG.info("> fixedDelayWithInitialDelay");
 		
